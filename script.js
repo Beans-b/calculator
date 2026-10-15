@@ -22,3 +22,30 @@ function calculate() {
         display.value = "Error";
     }
 }
+
+document.addEventListener("keydown", function (event) {
+    const key = event.key;
+
+    if ("0123456789+-*/.".includes(key)) {
+        addValue(key);
+    } else if (key === "Enter" || key === "=") {
+        event.preventDefault();
+        calculate();
+    } else if (key === "Escape") {
+        clearDisplay();
+    } else if (key === "Backspace") {
+        display.value = display.value.slice(0, -1) || "0";
+    }
+});
+
+const themeToggle = document.getElementById("themeToggle");
+
+themeToggle.addEventListener("click", function () {
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+        themeToggle.textContent = "Switch to Light Mode";
+    } else {
+        themeToggle.textContent = "Switch to Dark Mode";
+    }
+});

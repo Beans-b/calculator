@@ -53,7 +53,7 @@ button {
 }
 
 button:hover {
-  background: #4a5f7c;
+  background: #a32332;
 }
 
 .clear {
@@ -61,10 +61,32 @@ button:hover {
 }
 
 .equals {
-    background: #7398ff;
-    color: #101827;
+    background: #022011;
+    color: #d37c7c;
 }
 
 .equals:hover {
     background: #9ab4ff;
+}
+
+/* Light mode is the default theme */
+body {
+    background-color: #f4f6fa;
+    color: #172033;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark mode */
+body.dark-mode {
+    background-color: #101827;
+    color: #f4f6fa;
+}
+
+/* Theme toggle button */
+#themeToggle {
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
