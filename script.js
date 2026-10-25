@@ -307,6 +307,56 @@ function square() {
     });
 }
 
+// ---------- Memory (MC, MR, M+, M-) ----------
+
+const memoryIndicator = document.getElementById("memoryIndicator");
+
+let memory = 0;
+
+function updateMemoryIndicator() {
+    memoryIndicator.hidden = memory === 0;
+}
+
+function memoryClear() {
+    memory = 0;
+    updateMemoryIndicator();
+}
+
+function memoryRecall() {
+    clearErrorIfShown();
+    const number = lastNumber();
+    const last = state.expression.slice(-1);
+
+    if (OPERATORS.includes(last)) {
+        // After an operator, MR fills in the next number: 5 + MR
+        state.expression += String(memory);
+        state.justCalculated = false;
+        updateDisplay();
+    } else if (number && number.start > 0 && !state.justCalculated) {
+        replaceLastNumber(number, String(memory));
+    } else {
+        showResult(memory);
+    }
+}
+
+function memoryAdd() {
+    clearErrorIfShown();
+    safely(function () {
+        memory = checkResult(memory + currentValue());
+        state.justCalculated = true;
+        updateMemoryIndicator();
+    });
+}
+
+function memorySubtract() {
+    clearErrorIfShown();
+    safely(function () {
+        memory = checkResult(memory - currentValue());
+        state.justCalculated = true;
+        updateMemoryIndicator();
+    });
+}
+
 // ---------- Calculation history ----------
 
 const HISTORY_KEY = "calculator-history";

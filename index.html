@@ -21,11 +21,19 @@
             </header>
 
             <div class="display-container">
-                <span class="display-label">YOUR CALCULATION</span>
+                <div class="display-top">
+                    <span class="display-label">YOUR CALCULATION</span>
+                    <span id="memoryIndicator" class="memory-indicator" hidden title="A value is stored in memory">M</span>
+                </div>
                 <input type="text" id="display" value="0" readonly aria-label="Calculator display" aria-live="polite">
             </div>
 
             <div class="buttons">
+                <button type="button" onclick="memoryClear()" class="memory" title="Memory clear">MC</button>
+                <button type="button" onclick="memoryRecall()" class="memory" title="Memory recall">MR</button>
+                <button type="button" onclick="memoryAdd()" class="memory" title="Add to memory">M+</button>
+                <button type="button" onclick="memorySubtract()" class="memory" title="Subtract from memory">M−</button>
+
                 <button type="button" onclick="squareRoot()" class="function" title="Square root (R)">√</button>
                 <button type="button" onclick="square()" class="function" title="Square (S)">x²</button>
                 <button type="button" onclick="addValue('^')" class="function" title="Power (^)">xʸ</button>
