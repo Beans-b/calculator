@@ -222,6 +222,44 @@ button {
 .buttons .equals:hover {
     background: #5845d5;
 }
+
+/* Scientific function buttons */
+
+.buttons .function {
+    background: #e6f6f1;
+    color: #17785f;
+    font-size: 17px;
+}
+
+.buttons .function:hover {
+    background: #d2efe6;
+}
+
+/* Wide zero button */
+
+.buttons .zero {
+    grid-column: span 2;
+}
+
+/* Error message in the display */
+
+#display.error {
+    color: #c7354c;
+    font-size: 22px;
+}
+
+body.dark-mode #display.error {
+    color: #ff8a9b;
+}
+
+body.dark-mode .buttons .function {
+    background: #23484a;
+    color: #9cf0d6;
+}
+
+body.dark-mode .buttons .function:hover {
+    background: #2d5b5d;
+}
 /* Dark mode button colors */
 
 body.dark-mode .buttons .clear {

@@ -20,29 +20,38 @@
 
         <div class="display-container">
             <span class="display-label">YOUR CALCULATION</span>
-            <input type="text" id="display" value="0" readonly aria-label="Calculator display">
+            <input type="text" id="display" value="0" readonly aria-label="Calculator display" aria-live="polite">
         </div>
 
         <div class="buttons">
-            <button type="button" onclick="clearDisplay()" class="clear">AC</button>
+            <button type="button" onclick="squareRoot()" class="function" title="Square root (R)">√</button>
+            <button type="button" onclick="square()" class="function" title="Square (S)">x²</button>
+            <button type="button" onclick="addValue('^')" class="function" title="Power (^)">xʸ</button>
+            <button type="button" onclick="backspace()" class="function" title="Delete (Backspace)" aria-label="Delete">⌫</button>
+
+            <button type="button" onclick="clearDisplay()" class="clear" title="Clear (Esc)">AC</button>
+            <button type="button" onclick="toggleSign()" class="function" title="Toggle sign (N)">+/−</button>
+            <button type="button" onclick="percentage()" class="function" title="Percent (%)">%</button>
+            <button type="button" onclick="addValue('/')" class="operator" aria-label="Divide">÷</button>
+
             <button type="button" onclick="addValue('7')">7</button>
             <button type="button" onclick="addValue('8')">8</button>
             <button type="button" onclick="addValue('9')">9</button>
+            <button type="button" onclick="addValue('*')" class="operator" aria-label="Multiply">×</button>
 
             <button type="button" onclick="addValue('4')">4</button>
             <button type="button" onclick="addValue('5')">5</button>
             <button type="button" onclick="addValue('6')">6</button>
-            <button type="button" onclick="addValue('3')">3</button>
+            <button type="button" onclick="addValue('-')" class="operator" aria-label="Subtract">−</button>
 
             <button type="button" onclick="addValue('1')">1</button>
             <button type="button" onclick="addValue('2')">2</button>
-            <button type="button" onclick="addValue('0')">0</button>
-            <button type="button" onclick="addValue('+')" class="operator">+</button>
+            <button type="button" onclick="addValue('3')">3</button>
+            <button type="button" onclick="addValue('+')" class="operator" aria-label="Add">+</button>
 
-            <button type="button" onclick="addValue('-')" class="operator">−</button>
-            <button type="button" onclick="addValue('*')" class="operator">×</button>
-            <button type="button" onclick="addValue('/')" class="operator">÷</button>
-            <button type="button" onclick="calculate()" class="equals">=</button>
+            <button type="button" onclick="addValue('0')" class="zero">0</button>
+            <button type="button" onclick="addValue('.')" aria-label="Decimal point">.</button>
+            <button type="button" onclick="calculate()" class="equals" aria-label="Equals">=</button>
         </div>
 
         <div class="calculator-footer">
