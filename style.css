@@ -328,6 +328,149 @@ body.dark-mode #themeToggle::before {
     font-size: 11px;
 }
 
+/* ---------- Calculator + history layout ---------- */
+
+.app {
+    width: 100%;
+    max-width: 700px;
+
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 24px;
+}
+
+/* ---------- History panel ---------- */
+
+.history {
+    width: 100%;
+    max-width: 300px;
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+
+    box-shadow: 0 16px 45px var(--shadow-color);
+
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--text-color);
+}
+
+#clearHistory {
+    height: 32px;
+    padding: 0 14px;
+
+    background: #ffe8eb;
+    color: #c7354c;
+
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+#clearHistory:hover {
+    background: #ffd5db;
+}
+
+body.dark-mode #clearHistory {
+    background: #512d3a;
+    color: #ffb4c0;
+}
+
+.history-hint,
+.history-empty {
+    margin: 8px 0 14px;
+    color: var(--muted-color);
+    font-size: 12px;
+}
+
+.history-empty {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.history-empty[hidden] {
+    display: none;
+}
+
+.history-list {
+    flex: 1;
+    min-height: 0;
+    max-height: 560px;
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+    overflow-y: auto;
+}
+
+.history-entry {
+    width: 100%;
+    height: auto;
+    margin-bottom: 8px;
+    padding: 10px 12px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+
+    background: var(--display-bg);
+    border: 1px solid var(--border-color);
+    text-align: right;
+}
+
+.history-entry:hover {
+    background: var(--button-hover);
+}
+
+.history-expression {
+    max-width: 100%;
+    color: var(--muted-color);
+    font-size: 13px;
+    font-weight: normal;
+    overflow-wrap: anywhere;
+}
+
+.history-result {
+    max-width: 100%;
+    color: var(--display-text);
+    font-size: 20px;
+    overflow-wrap: anywhere;
+}
+
+/* Stack the history under the calculator on narrow screens */
+
+@media (max-width: 720px) {
+    .app {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .history {
+        max-width: 360px;
+    }
+
+    .history-list {
+        max-height: 300px;
+    }
+}
+
 /* ---------- Keyboard accessibility ---------- */
 
 button:focus-visible {

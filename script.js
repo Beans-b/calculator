@@ -19,7 +19,7 @@ function prettify(expression) {
     return expression
         .replace(/\*/g, "×")
         .replace(/\//g, "÷")
-        .replace(/(\d)-/g, "$1−");
+        .replace(/(^|[^e])-/g, "$1−"); // keep e-notation like 1e-7 as typed
 }
 
 function updateDisplay() {
@@ -45,14 +45,13 @@ function tokenize(expression) {
         const char = expression[i];
 
         if ("0123456789.".includes(char)) {
-            let number = "";
-            while (i < expression.length && "0123456789.".includes(expression[i])) {
-                number += expression[i++];
-            }
-            if (number === "." || (number.match(/\./g) || []).length > 1) {
+            // Also accepts e-notation such as 1e+21 for very large results
+            const number = expression.slice(i).match(/^(\d+\.?\d*|\.\d+)(e[+-]?\d+)?/);
+            if (!number || expression[i + number[0].length] === ".") {
                 throw new CalcError("Invalid number");
             }
-            tokens.push(parseFloat(number));
+            tokens.push(parseFloat(number[0]));
+            i += number[0].length;
             continue;
         }
 
@@ -239,7 +238,13 @@ function calculate() {
     }
 
     safely(function () {
-        showResult(currentValue());
+        const expression = state.expression.replace(/[+\-*/^]+$/, "");
+        const result = currentValue();
+        // Only log real calculations, not "5 = 5"
+        if (expression !== String(result)) {
+            addToHistory(formatExpression(expression), result);
+        }
+        showResult(result);
     });
 }
 
@@ -286,7 +291,9 @@ function squareRoot() {
     safely(function () {
         const value = currentValue();
         if (value < 0) throw new CalcError("Cannot take √ of a negative");
-        showResult(checkResult(Math.sqrt(value)));
+        const result = checkResult(Math.sqrt(value));
+        addToHistory("√" + formatNumber(value), result);
+        showResult(result);
     });
 }
 
@@ -294,8 +301,96 @@ function square() {
     clearErrorIfShown();
     safely(function () {
         const value = currentValue();
-        showResult(checkResult(value * value));
+        const result = checkResult(value * value);
+        addToHistory(formatNumber(value) + "²", result);
+        showResult(result);
     });
+}
+
+// ---------- Calculation history ----------
+
+const HISTORY_KEY = "calculator-history";
+const MAX_HISTORY = 50;
+
+const historyList = document.getElementById("historyList");
+const historyEmpty = document.getElementById("historyEmpty");
+
+let calcHistory = loadHistory();
+
+// "15*4" -> "15 × 4"
+function formatExpression(expression) {
+    // Space out operators that follow a number, but not negative signs
+    return prettify(expression.replace(/([\d.])([+\-*/^])/g, "$1 $2 "));
+}
+
+// Wraps negatives in brackets so "(−3)²" reads clearly
+function formatNumber(value) {
+    return value < 0 ? "(−" + Math.abs(value) + ")" : String(value);
+}
+
+function loadHistory() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(HISTORY_KEY));
+        return Array.isArray(saved) ? saved : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveHistory() {
+    try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(calcHistory));
+    } catch {
+        // Storage can be blocked (e.g. private browsing); history still works for this visit
+    }
+}
+
+function addToHistory(expression, result) {
+    calcHistory.unshift({ expression: expression, result: result });
+    calcHistory = calcHistory.slice(0, MAX_HISTORY);
+    saveHistory();
+    renderHistory();
+}
+
+function renderHistory() {
+    historyList.innerHTML = "";
+    historyEmpty.hidden = calcHistory.length > 0;
+
+    calcHistory.forEach(function (entry) {
+        const item = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "history-entry";
+        button.title = "Use this result";
+
+        const expression = document.createElement("span");
+        expression.className = "history-expression";
+        expression.textContent = entry.expression + " =";
+
+        const result = document.createElement("span");
+        result.className = "history-result";
+        result.textContent = prettify(String(entry.result));
+
+        button.append(expression, result);
+        button.addEventListener("click", function () {
+            useHistoryResult(entry.result);
+        });
+
+        item.append(button);
+        historyList.append(item);
+    });
+}
+
+// Clicking an entry loads its result back into the display
+function useHistoryResult(result) {
+    state.error = false;
+    showResult(result);
+}
+
+function clearHistory() {
+    calcHistory = [];
+    saveHistory();
+    renderHistory();
 }
 
 // ---------- Keyboard support ----------
@@ -341,3 +436,5 @@ themeToggle.addEventListener("click", function () {
         themeToggle.textContent = "Switch to Dark Mode";
     }
 });
+
+renderHistory();
